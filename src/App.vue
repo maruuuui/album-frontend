@@ -8,14 +8,14 @@
       </div>
       <v-spacer></v-spacer>
       <div class="d-flex align-center">
-        <v-btn text>
+        <v-btn text @click="showUploadForm=!showUploadForm">
           <span class="mr-2">upload Image</span>
         </v-btn>
       </div>
     </v-app-bar>
 
     <v-content>
-      <template>
+      <template v-if="showUploadForm">
         <v-container>
           <form
             action="/api/v1/image/"
@@ -39,14 +39,7 @@
       <v-container fluid grid-list-md>
         <v-row align-content="start">
           <v-col sm="4" md="3" lg="2" v-for="image_item in image_items" v-bind:key="image_item.id">
-            <!-- 各画像のサムネイル -->
-            <v-card class="flexcard" height="100%" @click="showOverlay(image_item)">
-              <v-img class="align-end" :src="image_item.image" height="200">
-                <div class="blue lighten-4">
-                  <span class="white--text">{{ image_item.image_name }}</span>
-                </div>
-              </v-img>
-            </v-card>
+            <imageCard :image_item="image_item" @showOverlay="showOverlay" />
           </v-col>
         </v-row>
       </v-container>
@@ -106,13 +99,18 @@
 <script>
 import axios from "axios";
 import Cookies from "js-cookie";
+import imageCard from "./components/imageCard";
 
 export default {
   name: "App",
 
+  components: {
+    imageCard: imageCard
+  },
+
   data: () => ({
     image_items: [], //APIで取得してくる画像の入れ物
-    uploadWindowIsShown: false,
+    showUploadForm: false,
     overlay: false, //オーバーレイの表示状態
     overlay_item: {}, //オーバーレイに表示する対象
     overlay_item_url: "", //オーバーレイに表示する対象の編集に使うURL
