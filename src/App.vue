@@ -39,7 +39,7 @@
       <v-container fluid grid-list-md>
         <v-row align-content="start">
           <v-col sm="4" md="3" lg="2" v-for="image_item in image_items" v-bind:key="image_item.id">
-            <imageCard :image_item="image_item" @showOverlay="showOverlay" />
+            <image-card :image_item="image_item" @showOverlay="showOverlay" />
           </v-col>
         </v-row>
       </v-container>
@@ -105,7 +105,7 @@ export default {
   name: "App",
 
   components: {
-    imageCard: imageCard
+    "image-card": imageCard
   },
 
   data: () => ({
