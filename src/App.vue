@@ -97,6 +97,7 @@
   </v-app>
 </template>
 <script>
+/* eslint-disable no-console */
 import axios from "axios";
 import Cookies from "js-cookie";
 import imageCard from "./components/imageCard";
@@ -146,6 +147,8 @@ export default {
       this.overlay_item_url = this.api_url + image_item.id + "/";
     },
     getImage(url) {
+      console.log("getImage", url); // レスポンスデータ
+
       this.image_items = [];
       var self = this; //スコープ的に必要っぽい
       axios.get(url).then(function(response) {
@@ -165,7 +168,12 @@ export default {
       axios
         .post(url, request, requestHeader)
         .then(function(response) {
-          alert(response);
+          console.log(response.data); // レスポンスデータ
+          console.log(response.status); // ステータスコード
+          console.log(response.statusText); // ステータステキスト
+          console.log(response.headers); // レスポンスヘッダ
+          console.log(response.config); // コンフィグ
+          alert("画像を追加しました。");
           self.getImage(url);
         })
         .catch(function(error) {
@@ -194,10 +202,15 @@ export default {
       };
       axios
         .delete(url, requestHeaderWithNullData)
-        .then(function() {
-          alert("削除しました");
+        .then(function(response) {
+          console.log(response.data); // レスポンスデータ
+          console.log(response.status); // ステータスコード
+          console.log(response.statusText); // ステータステキスト
+          console.log(response.headers); // レスポンスヘッダ
+          console.log(response.config); // コンフィグ
+          alert("削除しました。");
           self.overlay = false;
-          self.getImage();
+          self.getImage(self.api_url);
         })
         .catch(function(error) {
           alert(error);
