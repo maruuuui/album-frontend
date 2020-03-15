@@ -8,7 +8,7 @@
       </div>
       <v-spacer></v-spacer>
       <div class="d-flex align-center">
-        <v-btn text @click="showUploadForm=!showUploadForm">
+        <v-btn text @click="showUploadForm = !showUploadForm">
           <span class="mr-2">upload Image</span>
         </v-btn>
       </div>
@@ -24,7 +24,12 @@
             class="form-horizontal"
             novalidate
           >
-            <v-file-input label="アップロード画像" filled name="image" id="post_image_id"></v-file-input>
+            <v-file-input
+              label="アップロード画像"
+              filled
+              name="image"
+              id="post_image_id"
+            ></v-file-input>
             <v-text-field
               v-model="post_memo"
               prepend-icon="mdi-pencil"
@@ -38,7 +43,13 @@
       </template>
       <v-container fluid grid-list-md>
         <v-row align-content="start">
-          <v-col sm="4" md="3" lg="2" v-for="image_item in image_items" v-bind:key="image_item.id">
+          <v-col
+            sm="4"
+            md="3"
+            lg="2"
+            v-for="image_item in image_items"
+            v-bind:key="image_item.id"
+          >
             <image-card :image_item="image_item" @showOverlay="showOverlay" />
           </v-col>
         </v-row>
@@ -58,6 +69,7 @@
   </v-app>
 </template>
 <script>
+/* eslint-disable no-console */
 import axios from "axios";
 import Cookies from "js-cookie";
 import imageCard from "./components/imageCard";
@@ -113,6 +125,8 @@ export default {
       this.showImageDetailOverlay = false;
     },
     getImage(url) {
+      console.log("getImage", url); // レスポンスデータ
+
       this.image_items = [];
       var self = this; //スコープ的に必要っぽい
       axios.get(url).then(function(response) {
@@ -132,7 +146,12 @@ export default {
       axios
         .post(url, request, requestHeader)
         .then(function(response) {
-          alert(response);
+          console.log(response.data); // レスポンスデータ
+          console.log(response.status); // ステータスコード
+          console.log(response.statusText); // ステータステキスト
+          console.log(response.headers); // レスポンスヘッダ
+          console.log(response.config); // コンフィグ
+          alert("画像を追加しました。");
           self.getImage(url);
         })
         .catch(function(error) {
@@ -161,10 +180,16 @@ export default {
       };
       axios
         .delete(url, requestHeaderWithNullData)
-        .then(function() {
-          alert("削除しました");
+
+        .then(function(response) {
+          console.log(response.data); // レスポンスデータ
+          console.log(response.status); // ステータスコード
+          console.log(response.statusText); // ステータステキスト
+          console.log(response.headers); // レスポンスヘッダ
+          console.log(response.config); // コンフィグ
+          alert("削除しました。");
           self.showImageDetailOverlay = false;
-          self.getImage();
+          self.getImage(self.api_url);
         })
         .catch(function(error) {
           alert(error);
